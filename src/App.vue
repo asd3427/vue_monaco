@@ -13,11 +13,11 @@
 <script>
 	// import MonacoEditor from "vue-monaco";
 	import * as monaco from "monaco-editor";
+	
 	export default {
 		name: "app",
 		mounted() {
 			var language = this.getTypeSelected()
-			console.log(language)
 			monaco.languages.registerCompletionItemProvider(language, {
 				
 				// eslint-disable-next-line no-unused-vars
@@ -66,13 +66,26 @@
 				}
 			});
 			
-			monaco.editor.create(document.getElementById("container"), {
+			const mo = monaco.editor.create(document.getElementById("container"), {
 				value: "",
 				language: language,
 				theme: "vs-dark",
-				fontSize: "25px"
+				fontSize: "25px",
+				wordWrap: 'on', // 自动换行-->
+				minimap: {
+					enabled: false // 关闭小地图-->
+				},
 			});
+			 mo.onDidChangeModelContent((event) => {
+				// 编辑器内容change事件
+				 console.log(mo.getValue());
+				
+			 });
+			
 		},
+		
+		
+		// 選單
 		data() {
 			return {
 				typeList: [
@@ -96,6 +109,7 @@
 			}
 		},
 		
+		
 	};
 
 </script>
@@ -109,4 +123,3 @@
 		padding: 3rem;
 	}
 </style>
-
