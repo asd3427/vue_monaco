@@ -2,12 +2,14 @@
   "name": "monaco-app",
   "version": "0.1.0",
   "private": true,
+  "main": "src/main.js",
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
+    "ant-design-vue": "^1.6.1",
     "core-js": "^2.6.5",
     "monaco-editor": "^0.16.2",
     "monaco-editor-webpack-plugin": "^1.7.0",
