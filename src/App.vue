@@ -4,19 +4,20 @@
 			<header style="height: 80px;background-color: cornflowerblue">
 				<a-row type="flex" justify="center" align="middle">
 					<a-col :span="20">
-					<div id="log" style="width: 100px;height: 50px;background-color: red"></div>
+						<div id="log" style="width: 100px;height: 50px;background-color: red"></div>
 					</a-col>
-					<a-col :span="1":offset="0">
+					<a-col :span="1" :offset="0">
 						<a-icon type="search"/>
 					</a-col>
 					<a-col :span="1">
-					
-					<a-icon type="bell"/>
+						
+						<a-icon type="bell"/>
 					</a-col>
 					
 					<a-col :span="1">
 						
-						<a-icon type="github"/>用户名
+						<a-icon type="github"/>
+						用户名
 					</a-col>
 				
 				</a-row>
@@ -99,6 +100,7 @@
     import * as monaco from "monaco-editor";
     import * as ant from 'ant-design-vue'
     import editor from "monaco-editor";
+    import * as tf from '@tensorflow/tfjs'
 
     export default {
         name: "app",
@@ -175,7 +177,7 @@
                 },
             });
 
-            this.edits = mo
+            this.edits = mo2
             // mo.onDidChangeCursorPosition(e => {
             // 	// console.log('Cursor changed', mo.getPosition());
             //
@@ -209,6 +211,9 @@
                 return this.selected
             },
             wrap() {
+                // const shape = [2, 3]; // 2 行, 3 列
+                // const a = tf.tensor([1.0, 2.0, 3.0, 10.0, 20.0, 30.0], shape);
+                // a.print(); // 打印张量值
                 console.log(this.edits.getValue())
 
             }
