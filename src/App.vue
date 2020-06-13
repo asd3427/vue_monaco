@@ -43,7 +43,7 @@
 							<h2>Monaco Editor Auto-completion test for <code>{{getTypeSelected()}}</code> files</h2>
 						</a-col>
 						<a-col :span="1">
-							<a-button v-on:click="wrap()">點我</a-button>
+							<a-button v-on:click="wrap1()">點我</a-button>
 						</a-col>
 						<a-col :span="23">
 							<div id="container"></div>
@@ -73,7 +73,7 @@
 							<h2>Monaco Editor Auto-completion test for <code>{{getTypeSelected()}}</code> files</h2>
 						</a-col>
 						<a-col :span="1">
-							<a-button v-on:click="wrap()">點我</a-button>
+							<a-button v-on:click="wrap2()">點我</a-button>
 						</a-col>
 						<a-col :span="23">
 							<div id="container2"></div>
@@ -84,7 +84,7 @@
 			</a-layout-content>
 			<a-layout-content>
 				<a-col :span="24" :offset="22">
-					<a-button style="background-color: #66ec66" v-on:click="wrap()">提交全部</a-button>
+					<a-button style="background-color: #66ec66" v-on:click="wrap3()">提交全部</a-button>
 				</a-col>
 			</a-layout-content>
 			
@@ -98,9 +98,8 @@
 <script>
     // import MonacoEditor from "vue-monaco";
     import * as monaco from "monaco-editor";
-    import * as ant from 'ant-design-vue'
-    import editor from "monaco-editor";
-    import * as tf from '@tensorflow/tfjs'
+    import AV from "leancloud-storage";
+
 
     export default {
         name: "app",
@@ -153,17 +152,37 @@
             // // 		};
             // // 	}
             //  });
-
-            var mo = monaco.editor.create(document.getElementById("container"), {
-                value: "",
-                language: language,
-                theme: "vs-dark",
-                fontSize: "25px",
-                wordWrap: 'on', // 自动换行-->
-                minimap: {
-                    enabled: false // 关闭小地图-->
-                },
+            AV.init({
+                appId: "86qP86de9n4Uu38fsHTUPm6i-gzGzoHsz",
+                appKey: "JQTIH4Hprl1HcS3Nmlwhh5LU",
+                masterKey: "2nuyXlIYzehoAIDXTYpPJCSg",
+                serverURL: "https://86qp86de.lc-cn-n1-shared.com"
             });
+            var user_code = ''
+
+            var get_data = AV.Cloud.rpc('get_code', {
+                "userId": "0008",
+                'problem_id': 0,
+            }, {remote: true}).then(function (data) {
+                return data
+            });
+
+            get_data.then(function (data) {
+                var mo = monaco.editor.create(document.getElementById("container"), {
+                    value: data[0],
+                    language: language,
+                    theme: "vs-dark",
+                    fontSize: "13px",
+                    lineNumbers: "off",
+                    wordWrap: 'on', // 自动换行-->
+                    minimap: {
+                        enabled: false // 关闭小地图-->
+                    },
+                });
+
+            });
+
+
             var mo2 = monaco.editor.create(document.getElementById("container2"), {
                 value: "import pandats as pd\n" +
                     "class Data:\n" +
@@ -172,12 +191,14 @@
                 theme: "vs",
                 fontSize: "13px",
                 wordWrap: 'on', // 自动换行-->
+                lineNumbers: "off",
                 minimap: {
                     enabled: false // 关闭小地图-->
                 },
             });
 
-            this.edits = mo2
+
+            this.edits2 = mo2
             // mo.onDidChangeCursorPosition(e => {
             // 	// console.log('Cursor changed', mo.getPosition());
             //
@@ -196,7 +217,9 @@
                     {id: 3, name: 'c++'},
                 ],
                 selected: '',
-                edits: null,
+                mo1: null,
+                edits2: null,
+                code: ''
             }
         }
         ,
@@ -210,15 +233,52 @@
             getTypeSelected() {
                 return this.selected
             },
-            wrap() {
-                // const shape = [2, 3]; // 2 行, 3 列
-                // const a = tf.tensor([1.0, 2.0, 3.0, 10.0, 20.0, 30.0], shape);
-                // a.print(); // 打印张量值
-                console.log(this.edits.getValue())
+            wrap1() {
+                console.log('1')
+                AV.init({
+                    appId: "86qP86de9n4Uu38fsHTUPm6i-gzGzoHsz",
+                    appKey: "JQTIH4Hprl1HcS3Nmlwhh5LU",
+                    masterKey: "2nuyXlIYzehoAIDXTYpPJCSg",
+                    serverURL: "https://86qp86de.lc-cn-n1-shared.com"
+                });
 
+
+                AV.Cloud.rpc('submit_code', {
+                    "userId": "0002",
+                    'problem_id': 0,
+                    'req_type': 'user_code',
+                    'code_text': document.getElementById("container").innerText
+                }, {remote: true}).then(function (data) {
+                    return data
+                });
+            },
+            wrap2() {
+                console.log(2)
+                AV.init({
+                    appId: "86qP86de9n4Uu38fsHTUPm6i-gzGzoHsz",
+                    appKey: "JQTIH4Hprl1HcS3Nmlwhh5LU",
+                    masterKey: "2nuyXlIYzehoAIDXTYpPJCSg",
+                    serverURL: "https://86qp86de.lc-cn-n1-shared.com"
+                });
+
+
+                AV.Cloud.rpc('submit_code', {
+                    "userId": "0002",
+                    'problem_id': 0,
+                    'req_type': 'user_code',
+                    'code_text': document.getElementById("container2").innerText
+                }, {remote: true}).then(function (data) {
+                    return data
+                });
+            },
+            wrap3() {
+                console.log(3)
+                this.wrap1()
+                this.wrap2()
             }
-        }
-        ,
+
+
+        },
 
 
     };

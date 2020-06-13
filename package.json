@@ -12,9 +12,11 @@
     "@tensorflow/tfjs": "^2.0.0",
     "ant-design-vue": "^1.6.1",
     "core-js": "^2.6.5",
+    "leancloud-storage": "^4.6.1",
     "monaco-editor": "^0.16.2",
     "monaco-editor-webpack-plugin": "^1.7.0",
-    "vue": "^2.6.6"
+    "vue": "^2.6.6",
+    "vue-resource": "^1.5.1"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.5.0",
