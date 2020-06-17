@@ -169,7 +169,7 @@
             
            async function aaa(){
                let  data=  await get_data.then( data =>data);
-              
+               console.log(123,typeof data)
                return data;
             }
 	        let data = aaa();
