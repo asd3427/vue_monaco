@@ -43,7 +43,7 @@
 							<h2>Monaco Editor Auto-completion test for <code>{{getTypeSelected()}}</code> files</h2>
 						</a-col>
 						<a-col :span="1">
-							<a-button v-on:click="wrap1()">點我</a-button>
+							<a-button v-on:click="wrap1()">提交</a-button>
 						</a-col>
 						<a-col :span="23">
 							<div id="container"></div>
@@ -73,7 +73,7 @@
 							<h2>Monaco Editor Auto-completion test for <code>{{getTypeSelected()}}</code> files</h2>
 						</a-col>
 						<a-col :span="1">
-							<a-button v-on:click="wrap2()">點我</a-button>
+							<a-button v-on:click="wrap2()">提交</a-button>
 						</a-col>
 						<a-col :span="23">
 							<div id="container2"></div>
@@ -153,12 +153,11 @@
             // // 	}
             //  });
             AV.init({
-                appId: "86qP86de9n4Uu38fsHTUPm6i-gzGzoHsz",
-                appKey: "JQTIH4Hprl1HcS3Nmlwhh5LU",
-                masterKey: "2nuyXlIYzehoAIDXTYpPJCSg",
-                serverURL: "https://86qp86de.lc-cn-n1-shared.com"
+                appId: "QWYHkkGNh8yN1nShCJvjKzRd-MdYXbMMI",
+                appKey: "8w6hnkJ5oF1taia4aTvnUprV",
+                masterKey: "byEev964NTc41rpuJxFQO4O1",
+                serverURL: "https://api.alghub.com/"
             });
-            var user_code = ''
 
             var get_data = AV.Cloud.rpc('get_code', {
                 "userId": "0008",
@@ -166,23 +165,28 @@
             }, {remote: true}).then(function (data) {
                 return data
             });
-
-            get_data.then(function (data) {
-                var mo = monaco.editor.create(document.getElementById("container"), {
-                    value: data[0],
-                    language: language,
-                    theme: "vs-dark",
-                    fontSize: "13px",
-                    lineNumbers: "off",
-                    wordWrap: 'on', // 自动换行-->
-                    minimap: {
-                        enabled: false // 关闭小地图-->
-                    },
-                });
+            var mo;
+            
+           async function aaa(){
+               let  data=  await get_data.then( data =>data);
+              
+               return data;
+            }
+	        let data = aaa();
+            console.log(data)
+            mo = monaco.editor.create(document.getElementById("container"), {
+                value: data[0],
+                language: language,
+                theme: "vs",
+                fontSize: "13px",
+                lineNumbers: "off",
+                wordWrap: 'on', // 自动换行-->
+                minimap: {
+                    enabled: false // 关闭小地图-->
+                },
 
             });
-
-
+               console.log(123,mo)
             var mo2 = monaco.editor.create(document.getElementById("container2"), {
                 value: "import pandats as pd\n" +
                     "class Data:\n" +
@@ -234,14 +238,13 @@
                 return this.selected
             },
             wrap1() {
-                console.log('1')
+                console.log('提交1')
                 AV.init({
-                    appId: "86qP86de9n4Uu38fsHTUPm6i-gzGzoHsz",
-                    appKey: "JQTIH4Hprl1HcS3Nmlwhh5LU",
-                    masterKey: "2nuyXlIYzehoAIDXTYpPJCSg",
-                    serverURL: "https://86qp86de.lc-cn-n1-shared.com"
+                    appId: "QWYHkkGNh8yN1nShCJvjKzRd-MdYXbMMI",
+                    appKey: "8w6hnkJ5oF1taia4aTvnUprV",
+                    masterKey: "byEev964NTc41rpuJxFQO4O1",
+                    serverURL: "https://api.alghub.com/"
                 });
-
 
                 AV.Cloud.rpc('submit_code', {
                     "userId": "0002",
@@ -249,16 +252,17 @@
                     'req_type': 'user_code',
                     'code_text': document.getElementById("container").innerText
                 }, {remote: true}).then(function (data) {
-                    return data
+                    console.log(data)
                 });
+                
             },
             wrap2() {
-                console.log(2)
+                console.log('提交2')
                 AV.init({
                     appId: "86qP86de9n4Uu38fsHTUPm6i-gzGzoHsz",
                     appKey: "JQTIH4Hprl1HcS3Nmlwhh5LU",
                     masterKey: "2nuyXlIYzehoAIDXTYpPJCSg",
-                    serverURL: "https://86qp86de.lc-cn-n1-shared.com"
+                    serverURL: "https://api.alghub.com/"
                 });
 
 
@@ -268,11 +272,11 @@
                     'req_type': 'user_code',
                     'code_text': document.getElementById("container2").innerText
                 }, {remote: true}).then(function (data) {
-                    return data
+                    console.log(data)
                 });
             },
             wrap3() {
-                console.log(3)
+                console.log('提交3')
                 this.wrap1()
                 this.wrap2()
             }
