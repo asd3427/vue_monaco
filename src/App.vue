@@ -1,23 +1,25 @@
-<template xmlns:a-clo="http://www.w3.org/1999/html">
+<template xmlns:a-clo="http://www.w3.org/1999/html" xmlns:a-col="http://www.w3.org/1999/html">
 	<div id="app">
+		
 		<a-layout>
-			<header style="height: 80px;background-color: cornflowerblue">
+			<header style="height: 80px;background-color:  rgba(2,23,102,0.78)">
 				<a-row type="flex" justify="center" align="middle">
 					<a-col :span="20">
 						<div id="log" style="width: 100px;height: 50px;background-color: red"></div>
 					</a-col>
 					<a-col :span="1" :offset="0">
-						<a-icon type="search"/>
+						<a-icon style='color: white;size:50px' type="search"/>
 					</a-col>
 					<a-col :span="1">
 						
-						<a-icon type="bell"/>
+						<a-icon size="large" style='color: white'  type="bell"/>
 					</a-col>
 					
 					<a-col :span="1">
-						
-						<a-icon type="github"/>
-						用户名
+						<a-avatar size="large" icon="user" />
+					</a-col>
+					<a-col :span="1">
+						<p style="color: white;padding-top: 15px">用户名</p>
 					</a-col>
 				
 				</a-row>
@@ -25,8 +27,12 @@
 			</header>
 			<a-layout-content>
 				<!--编译器上方说明-->
+				<div id='link' style="width: 100%;height: 80px;background-color: white">
+					<p>首页/题库/1.房价预测</p>
+				</div>
 				<div id='top' style="width: 100%;height: 80px;background-color: white">
-					<h1>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusamus, provident.</h1>
+					<h1>{{message}}</h1>
+					<p>{{message2}}</p>
 				</div>
 				<!--选择1-->
 				<div id='editor1' style="width: 100%">
@@ -40,10 +46,10 @@
 							</div>
 						</a-col>
 						<a-col :span="18">
-							<h2>Monaco Editor Auto-completion test for <code>{{getTypeSelected()}}</code> files</h2>
+							<h2>特征工程 Feature Engineering </h2>
 						</a-col>
 						<a-col :span="1">
-							<a-button v-on:click="wrap1()">提交</a-button>
+							<a-button v-on:click="wrap1()">执行</a-button>
 						</a-col>
 						<a-col :span="23">
 							<div id="container"></div>
@@ -70,13 +76,13 @@
 							</div>
 						</a-col>
 						<a-col :span="18">
-							<h2>Monaco Editor Auto-completion test for <code>{{getTypeSelected()}}</code> files</h2>
+							<h2>模型训练 Model Training</h2>
 						</a-col>
 						<a-col :span="1">
-							<a-button v-on:click="wrap2()">提交</a-button>
+							<a-button v-on:click="wrap2()">执行</a-button>
 						</a-col>
 						<a-col :span="23">
-							<div id="container2"></div>
+							<div v-model="$message" id="container2"></div>
 						</a-col>
 					</a-row>
 					<!--编译器-->
@@ -89,7 +95,10 @@
 			</a-layout-content>
 			
 			<a-layout-footer style="text-align: center;margin-top: 50px">
-				Ant Design ©2018 Created by Ant UED
+				
+				<p>帮助   隐私  条款</p>
+				
+				Copyright ©2020 算法工坊出品
 			</a-layout-footer>
 		
 		</a-layout>
@@ -158,35 +167,41 @@
                 masterKey: "byEev964NTc41rpuJxFQO4O1",
                 serverURL: "https://api.alghub.com/"
             });
-
+            var datas = this.mo1
+            console.log(datas)
             var get_data = AV.Cloud.rpc('get_code', {
                 "userId": "0008",
                 'problem_id': 0,
             }, {remote: true}).then(function (data) {
                 return data
-            });
-            var mo;
-            
-           async function aaa(){
-               let  data=  await get_data.then( data =>data);
-               console.log(123,typeof data)
-               return data;
-            }
-	        let data = aaa();
-            console.log(data)
-            mo = monaco.editor.create(document.getElementById("container"), {
-                value: data[0],
-                language: language,
-                theme: "vs",
-                fontSize: "13px",
-                lineNumbers: "off",
-                wordWrap: 'on', // 自动换行-->
-                minimap: {
-                    enabled: false // 关闭小地图-->
-                },
+            }).then(function (data) {
+                var mo = monaco.editor.create(document.getElementById("container"), {
+                    value: data[0],
+                    language: language,
+                    theme: "vs",
+                    fontSize: "13px",
+                    // lineNumbers: "off",
+                    wordWrap: 'on', // 自动换行-->
+                    minimap: {
+                        enabled: false // 关闭小地图-->
+                    },
 
+                });
+                datas = mo
+                console.log(datas)
+                return datas
             });
-               console.log(123,mo)
+
+            //  var mo;
+            //
+            // async function aaa(){
+            //     let  data=  await get_data.then( data =>data);
+            //     return data;
+            //
+            //  }
+            //  let data = aaa();
+            //  console.log(data)
+
             var mo2 = monaco.editor.create(document.getElementById("container2"), {
                 value: "import pandats as pd\n" +
                     "class Data:\n" +
@@ -195,7 +210,7 @@
                 theme: "vs",
                 fontSize: "13px",
                 wordWrap: 'on', // 自动换行-->
-                lineNumbers: "off",
+                // lineNumbers: "off",
                 minimap: {
                     enabled: false // 关闭小地图-->
                 },
@@ -220,6 +235,8 @@
                     {id: 2, name: 'javascript'},
                     {id: 3, name: 'c++'},
                 ],
+	            message:'1.房价预测 简单',
+	            message2:'预测销售价格，并练习特征工程，实现线性回、随机森林、以及梯度提升模型',
                 selected: '',
                 mo1: null,
                 edits2: null,
@@ -247,30 +264,32 @@
                 });
 
                 AV.Cloud.rpc('submit_code', {
-                    "userId": "0002",
-                    'problem_id': 0,
-                    'req_type': 'user_code',
-                    'code_text': document.getElementById("container").innerText
-                }, {remote: true}).then(function (data) {
+                        "userId": "0002",
+                        'problem_id': 0,
+                        'req_type': 'user_code',
+                        'code_text': document.getElementsByClassName("view-lines")[0].innerText
+                    },
+                    {remote: true}).then(function (data) {
                     console.log(data)
                 });
-                
+
             },
             wrap2() {
                 console.log('提交2')
                 AV.init({
-                    appId: "86qP86de9n4Uu38fsHTUPm6i-gzGzoHsz",
-                    appKey: "JQTIH4Hprl1HcS3Nmlwhh5LU",
-                    masterKey: "2nuyXlIYzehoAIDXTYpPJCSg",
+                    appId: "QWYHkkGNh8yN1nShCJvjKzRd-MdYXbMMI",
+                    appKey: "8w6hnkJ5oF1taia4aTvnUprV",
+                    masterKey: "byEev964NTc41rpuJxFQO4O1",
                     serverURL: "https://api.alghub.com/"
                 });
+
 
 
                 AV.Cloud.rpc('submit_code', {
                     "userId": "0002",
                     'problem_id': 0,
                     'req_type': 'user_code',
-                    'code_text': document.getElementById("container2").innerText
+                    'code_text': document.getElementsByClassName("view-lines")[1].innerText
                 }, {remote: true}).then(function (data) {
                     console.log(data)
                 });
